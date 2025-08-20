@@ -1,0 +1,512 @@
+/* Timer Container */
+.timer-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.5s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* State-based styling */
+.timer-container.start {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.timer-container.blank {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.timer-container.green {
+    background-color: #28a745;
+    color: white;
+}
+
+.timer-container.orange {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.timer-container.red {
+    background-color: #dc3545;
+    color: white;
+}
+
+.timer-container.finish {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+/* Timer Header */
+.timer-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.timer-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.timer-header h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    margin-top: 0;
+}
+
+/* Configuration Panel */
+.config-panel {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.preset-selector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.preset-selector select {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group label {
+    min-width: 200px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.time-display {
+    min-width: 60px;
+    color: #6c757d;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Timer Display */
+.timer-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.time {
+    font-size: 5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: sans-serif;
+}
+
+.timer-message {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 3rem;
+    font-weight: bold;
+    position: absolute;
+    top: 35%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.message {
+    padding: 15px 30px;
+    border-radius: 10px;
+    background-color: white;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-size: 5rem;
+    color: #212529;
+    border: none;
+    font-weight: bold;
+}
+
+.red-message {
+    background-color: white;
+    color: #dc3545;
+    font-weight: bold;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.timer-indicator {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 50px auto;
+    transition: background-color 0.3s ease;
+}
+
+/* Timer indicator styles removed as we now use full background colors */
+
+/* Override for better contrast */
+.timer-container.green .message {
+    background-color: white;
+    color: #28a745;
+    border: none;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.timer-container.orange .message {
+    background-color: white;
+    color: #ffc107;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.timer-container.red .message {
+    background-color: white;
+    color: #dc3545;
+    border: none;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Timer Controls */
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    z-index: 5;
+}
+
+.report-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-warning {
+    background-color: #1a365d; /* Navy blue */
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    padding: 15px 40px;
+    border-radius: 6px;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-warning:hover {
+    background-color: #2c4c7c; /* Lighter navy blue */
+    color: white;
+}
+
+.report-controls .btn {
+    background-color: #1a365d; /* Navy blue */
+    color: white;
+    font-size: 1.2rem;
+    padding: 15px 60px;
+    display: block;
+    margin: 30px auto 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+/* Timer Legend */
+.timer-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin: 20px 0;
+}
+
+.timer-legend h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+}
+
+.color-box.blank {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+}
+
+.color-box.green {
+    background-color: #28a745;
+}
+
+.color-box.orange {
+    background-color: #ffc107;
+}
+
+.color-box.red {
+    background-color: #dc3545;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .time {
+        font-size: 6rem;
+    }
+
+    .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-group label {
+        min-width: auto;
+        margin-bottom: 5px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}
+
+/* Timer Report Styles */
+.timer-report {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    position: relative;
+    z-index: 1;
+}
+
+.timer-report h3 {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #212529;
+    font-size: 1.75rem;
+}
+
+.report-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.report-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Basic info has light gray background */
+.report-container > div:nth-child(1),
+.report-container > div:nth-child(2) {
+    background-color: #f0f0f0;
+}
+
+.report-label {
+    flex: 1;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.report-value {
+    min-width: 80px;
+    text-align: right;
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.report-status {
+    width: 30px;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-left: 15px;
+}
+
+.report-divider {
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 15px 0;
+    border: none;
+}
+
+.report-section-header {
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0 15px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    color: #1a365d;
+    font-size: 1.2rem;
+}
+
+.met {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.not-met {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.overtime {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.report-section-header {
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+}
+
+.report-status {
+    color: #155724;
+}
+
+.not-met .report-status {
+    color: #721c24;
+}
+
+.overtime .report-status {
+    color: #721c24;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+@media (max-width: 480px) {
+    .time {
+        font-size: 4rem;
+    }
+
+    .timer-message {
+        font-size: 2.8rem;
+        top: 30%;
+    }
+
+    /* Timer indicator removed */
+
+    .timer-legend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .report-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .report-value,
+    .report-status {
+        align-self: flex-end;
+    }
+
+    .timer-controls {
+        bottom: 30px;
+    }
+
+    .timer-report {
+        margin: 20px auto;
+        max-width: 95%;
+    }
+}

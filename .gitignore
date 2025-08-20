@@ -1,0 +1,105 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!?*.[Cc]ache/
+
+# VS Code files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# ReSharper files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity files
+_TeamCity*
+
+# DotCover files
+*.dotCover
+
+# NuGet packages
+*.nupkg
+# NuGet Symbol packages
+*.snupkg
+# Uncomment if necessary to avoid checking in packages
+# **/packages/*
+# except build/, which is used as an MSBuild target
+# !**/packages/build/
+
+# Publish profiles
+*.pubxml
+*.publishproj
+
+# Microsoft Azure artifacts
+csx/
+*.build.csdef
+ecf/
+rcf/
+
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
+
+# Node.js (Blazor WebAssembly may use npm)
+node_modules/
+npm-debug.log
+
+# Blazor WebAssembly specific
+**/wwwroot/dist/
+**/wwwroot/css/app.*.css
+**/wwwroot/js/app.*.js
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# JetBrains Rider
+.idea/
+*.sln.iml

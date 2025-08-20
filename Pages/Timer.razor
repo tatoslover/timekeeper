@@ -1,0 +1,325 @@
+@page "/"
+@using Timekeeper.Models
+@using Timekeeper.Services
+@using System.Timers
+@inject TimerService TimerService
+@inject PresetService PresetService
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+<div class="timer-container @GetTimerStateClass()">
+    <div class="timer-header">
+        <h1>Toastmasters Timer</h1>
+        @if (TimerService.CurrentState == TimerState.Start)
+        {
+            <h2>Select a Speech Type</h2>
+        }
+        else
+        {
+            <h2>@TimerService.CurrentConfig.Name</h2>
+        }
+    </div>
+
+    @if (TimerService.CurrentState == TimerState.Start)
+    {
+        <div class="config-panel">
+            <div class="preset-selector">
+                <label for="preset-select">Choose a preset:</label>
+                <select id="preset-select" @onchange="OnPresetSelected">
+                    <option value="">-- Select a preset --</option>
+                    @foreach (var preset in Presets)
+                    {
+                        <option value="@preset.Id">@preset.Name</option>
+                    }
+                </select>
+                <button class="btn btn-secondary" @onclick="OnCreateNewPreset">Create New</button>
+            </div>
+
+            <div class="timer-legend">
+                <h3>Timer Color Guide</h3>
+                <div class="legend-item">
+                    <div class="color-box blank"></div>
+                    <span>Blank: Keep speaking (under minimum time)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-box green"></div>
+                    <span>Green: Minimum time met</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-box orange"></div>
+                    <span>Orange: Approaching maximum time</span>
+                </div>
+                <div class="legend-item">
+                    <div class="color-box red"></div>
+                    <span>Red: Maximum time reached</span>
+                </div>
+            </div>
+
+            @if (SelectedConfig != null)
+            {
+                <div class="config-form">
+                    <div class="form-group">
+                        <label for="config-name">Speech Name:</label>
+                        <input id="config-name" type="text" @bind="SelectedConfig.Name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="green-time">Green Time (seconds):</label>
+                        <input id="green-time" type="number" min="1" @bind="SelectedConfig.GreenTime" />
+                        <span class="time-display">(@FormatSeconds(SelectedConfig.GreenTime))</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orange-time">Orange Time (seconds):</label>
+                        <input id="orange-time" type="number" min="1" @bind="SelectedConfig.OrangeTime" />
+                        <span class="time-display">(@FormatSeconds(SelectedConfig.OrangeTime))</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="red-time">Red Time (seconds):</label>
+                        <input id="red-time" type="number" min="1" @bind="SelectedConfig.RedTime" />
+                        <span class="time-display">(@FormatSeconds(SelectedConfig.RedTime))</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="finish-time">Finish Time (seconds, optional):</label>
+                        <input id="finish-time" type="number" min="0" @bind="SelectedConfig.FinishTime" />
+                        @if (SelectedConfig.FinishTime.HasValue)
+                        {
+                            <span class="time-display">(@FormatSeconds(SelectedConfig.FinishTime.Value))</span>
+                        }
+                    </div>
+
+                    <!-- Sound alerts option removed -->
+
+                    <div class="button-group">
+                        <button class="btn btn-primary" @onclick="OnStartTimer">Start Timer</button>
+                        <button class="btn btn-success" @onclick="OnSavePreset">Save Preset</button>
+                        @if (!IsNewConfig)
+                        {
+                            <button class="btn btn-danger" @onclick="OnDeletePreset">Delete Preset</button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="timer-display">
+            @if (TimerService.CurrentState != TimerState.Finish)
+            {
+                <div class="timer-message">
+                    @if (TimerService.CurrentState == TimerState.Red)
+                    {
+                        <span class="message red-message">Stop</span>
+                    }
+                    else
+                    {
+                        <span class="message">Continue</span>
+                    }
+                </div>
+            }
+        </div>
+
+        @if (TimerService.CurrentState != TimerState.Finish)
+        {
+            <div class="timer-controls">
+                @if (TimerService.IsRunning)
+                {
+                    <button class="btn" @onclick="OnPauseTimer">Pause</button>
+                }
+                else
+                {
+                    <button class="btn" @onclick="OnResumeTimer">Resume</button>
+                }
+                <button class="btn" @onclick="OnStopTimer">Stop</button>
+                <button class="btn" @onclick="OnResetTimer">Reset</button>
+            </div>
+        }
+    }
+
+    @if (TimerService.CurrentState == TimerState.Finish)
+    {
+        <div class="timer-report">
+            <h3>Speech Timer Report</h3>
+            <div class="report-container">
+                <div class="report-item">
+                    <span class="report-label">Speech Type:</span>
+                    <span class="report-value">@TimerService.CurrentConfig.Name</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Total Time:</span>
+                    <span class="report-value">@TimerService.ElapsedTimeFormatted</span>
+                </div>
+                <div class="report-divider"></div>
+                <div class="report-section-header">Target Times vs. Actual</div>
+                <div class="report-item @(TimerService.ElapsedSeconds >= TimerService.CurrentConfig.GreenTime ? "met" : "not-met")">
+                    <span class="report-label">Minimum Time (Green):</span>
+                    <span class="report-value">@FormatSeconds(TimerService.CurrentConfig.GreenTime)</span>
+                    <span class="report-status">@(TimerService.ElapsedSeconds >= TimerService.CurrentConfig.GreenTime ? "✓" : "✗")</span>
+                </div>
+                <div class="report-item">
+                    <span class="report-label">Middle Time (Orange):</span>
+                    <span class="report-value">@FormatSeconds(TimerService.CurrentConfig.OrangeTime)</span>
+                    <span class="report-status"></span>
+                </div>
+                <div class="report-item @(TimerService.ElapsedSeconds >= TimerService.CurrentConfig.RedTime ? "overtime" : "")">
+                    <span class="report-label">Maximum Time (Red):</span>
+                    <span class="report-value">@FormatSeconds(TimerService.CurrentConfig.RedTime)</span>
+                    <span class="report-status">@(TimerService.ElapsedSeconds >= TimerService.CurrentConfig.RedTime ? "⚠" : "")</span>
+                </div>
+
+
+            </div>
+
+            <div class="report-controls">
+                <button class="btn" @onclick="OnResetTimer">Reset</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<TimerConfig> Presets { get; set; } = new List<TimerConfig>();
+    private TimerConfig? SelectedConfig { get; set; }
+    private bool IsNewConfig { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Initialize default presets if none exist
+        await PresetService.InitializeDefaultPresetsAsync();
+
+        // Load presets
+        Presets = await PresetService.GetPresetsAsync();
+
+        // Set up event handler for timer state changes
+        TimerService.StateChanged += OnTimerStateChanged;
+
+        // If we have presets, select the first one
+        if (Presets.Count > 0)
+        {
+            SelectedConfig = Presets[0];
+        }
+    }
+
+    private void OnTimerStateChanged(object? sender, TimerState state)
+    {
+        // Force UI update
+        StateHasChanged();
+    }
+
+    private async Task OnPresetSelected(ChangeEventArgs e)
+    {
+        var presetId = e.Value?.ToString();
+
+        if (string.IsNullOrEmpty(presetId))
+        {
+            SelectedConfig = null;
+            IsNewConfig = false;
+            return;
+        }
+
+        var preset = await PresetService.GetPresetByIdAsync(presetId);
+        if (preset != null)
+        {
+            SelectedConfig = preset;
+            IsNewConfig = false;
+        }
+    }
+
+    private void OnCreateNewPreset()
+    {
+        SelectedConfig = TimerConfig.CreatePreset(SpeechPresetType.Custom);
+        IsNewConfig = true;
+    }
+
+    private void OnStartTimer()
+    {
+        if (SelectedConfig == null)
+        {
+            return;
+        }
+
+        // Validate configuration
+        var validationErrors = SelectedConfig.Validate();
+        if (validationErrors.Count > 0)
+        {
+            // TODO: Show validation errors to user
+            Console.WriteLine($"Configuration errors: {string.Join(", ", validationErrors)}");
+            return;
+        }
+
+        TimerService.SetConfig(SelectedConfig);
+        TimerService.Start();
+    }
+
+    private async Task OnSavePreset()
+    {
+        if (SelectedConfig == null)
+        {
+            return;
+        }
+
+        await PresetService.SavePresetAsync(SelectedConfig);
+
+        // Refresh presets
+        Presets = await PresetService.GetPresetsAsync();
+        IsNewConfig = false;
+    }
+
+    private async Task OnDeletePreset()
+    {
+        if (SelectedConfig == null || IsNewConfig)
+        {
+            return;
+        }
+
+        await PresetService.DeletePresetAsync(SelectedConfig.Id);
+
+        // Refresh presets
+        Presets = await PresetService.GetPresetsAsync();
+        SelectedConfig = Presets.Count > 0 ? Presets[0] : null;
+    }
+
+    private void OnPauseTimer()
+    {
+        TimerService.Pause();
+    }
+
+    private void OnResumeTimer()
+    {
+        TimerService.Start();
+    }
+
+    private void OnStopTimer()
+    {
+        TimerService.Pause();
+        TimerService.CurrentState = TimerState.Finish;
+        StateHasChanged();  // Force UI update
+    }
+
+    private void OnResetTimer()
+    {
+        TimerService.Reset();
+    }
+
+    private string GetTimerStateClass()
+    {
+        return TimerService.CurrentState.ToString().ToLower();
+    }
+
+    private string FormatSeconds(int seconds)
+    {
+        var timeSpan = TimeSpan.FromSeconds(seconds);
+        return $"{timeSpan.Minutes}:{timeSpan.Seconds:D2}";
+    }
+
+    // Removed unused time transitions methods
+
+    public void Dispose()
+    {
+        // Unsubscribe from events
+        TimerService.StateChanged -= OnTimerStateChanged;
+    }
+}

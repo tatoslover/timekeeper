@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Toastmasters Timer - Speech Timing Tool</title>
+        <meta
+            name="description"
+            content="A simple, effective timer for Toastmasters speeches with color indicators and timing reports."
+        />
+        <base href="/" />
+        <link href="css/timer.css" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="favicon.png" />
+    </head>
+    <body>
+        <div id="app">
+            <div
+                style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                "
+            >
+                <div style="text-align: center">
+                    <h1>Loading Toastmasters Timer...</h1>
+                    <p>A simple, effective timer for your speeches</p>
+                    <div class="loading-progress-container">
+                        <div class="loading-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="_framework/blazor.webassembly.js"></script>
+
+        <style>
+            .loading-progress-container {
+                width: 200px;
+                height: 5px;
+                background-color: #f3f3f3;
+                border-radius: 5px;
+                margin: 20px auto;
+                overflow: hidden;
+            }
+
+            .loading-progress-bar {
+                height: 100%;
+                width: 0;
+                background-color: #1b6ec2;
+                animation: loading-progress 2s infinite ease-in-out;
+            }
+
+            @keyframes loading-progress {
+                0% {
+                    width: 0;
+                }
+                50% {
+                    width: 100%;
+                }
+                100% {
+                    width: 0;
+                }
+            }
+        </style>
+    </body>
+</html>
