@@ -60,12 +60,14 @@ dotnet run
 
 ## Deployment
 
-This project is deployed on Azure Static Web Apps. You can deploy your own instance using:
+This project is deployed on Azure Static Web Apps. To deploy your own instance:
 
-- GitHub Pages
-- Azure Static Web Apps
-- Netlify
-- Any static file hosting service
+1. Fork this repository
+2. Create an Azure Static Web App resource in the Azure Portal
+3. Connect it to your GitHub repository
+4. The workflow will automatically build and deploy the application
+
+The deployment uses GitHub Actions with the Azure Static Web Apps workflow.
 
 ## Contributing
 
