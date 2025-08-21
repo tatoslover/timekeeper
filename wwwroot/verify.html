@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toastmasters Timer - Verification Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1a365d;
+            border-bottom: 2px solid #1a365d;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2a4365;
+            margin-top: 30px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        button {
+            background-color: #1a365d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2a4365;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Toastmasters Timer - Verification Page</h1>
+    <p>This page verifies that basic web functionality is working correctly. If this page loads but the main application doesn't, it will help diagnose the problem.</p>
+
+    <div class="status success">
+        <strong>✓ Basic HTML is working</strong> - This page loaded successfully!
+    </div>
+
+    <h2>Testing JavaScript</h2>
+    <div id="js-test" class="status warning">JavaScript status checking...</div>
+
+    <h2>Testing Network Requests</h2>
+    <button id="test-network">Test Network Requests</button>
+    <div id="network-results"></div>
+
+    <h2>Testing Content Types</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>File Type</th>
+                <th>Status</th>
+                <th>Content Type</th>
+            </tr>
+        </thead>
+        <tbody id="mime-results">
+            <tr>
+                <td colspan="3">Click "Test Content Types" to run tests</td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="test-mime">Test Content Types</button>
+
+    <h2>Environment Information</h2>
+    <div id="environment"></div>
+
+    <script>
+        // Test JavaScript
+        document.getElementById('js-test').className = 'status success';
+        document.getElementById('js-test').innerHTML = '<strong>✓ JavaScript is working</strong> - Dynamic content can be displayed.';
+
+        // Environment information
+        document.getElementById('environment').innerHTML = `
+            <ul>
+                <li><strong>Browser:</strong> ${navigator.userAgent}</li>
+                <li><strong>URL:</strong> ${window.location.href}</li>
+                <li><strong>Protocol:</strong> ${window.location.protocol}</li>
+                <li><strong>Host:</strong> ${window.location.host}</li>
+                <li><strong>Path:</strong> ${window.location.pathname}</li>
+            </ul>
+        `;
+
+        // Test network requests
+        document.getElementById('test-network').addEventListener('click', function() {
+            const resultsDiv = document.getElementById('network-results');
+            resultsDiv.innerHTML = '<div class="status warning">Testing network requests...</div>';
+
+            const endpoints = [
+                '/',
+                '/index.html',
+                '/verify.html',
+                '/css/timer.css',
+                '/js/diagnostics.js',
+                '/_framework/blazor.webassembly.js'
+            ];
+
+            let completedRequests = 0;
+            let results = '<h3>Network Request Results:</h3><ul>';
+
+            endpoints.forEach(endpoint => {
+                fetch(endpoint)
+                    .then(response => {
+                        results += `<li>${endpoint}: <strong>${response.ok ? '✓ Success' : '✗ Failed'}</strong> (${response.status} ${response.statusText})</li>`;
+                    })
+                    .catch(error => {
+                        results += `<li>${endpoint}: <strong>✗ Error</strong> - ${error.message}</li>`;
+                    })
+                    .finally(() => {
+                        completedRequests++;
+                        if (completedRequests === endpoints.length) {
+                            results += '</ul>';
+                            resultsDiv.innerHTML = results;
+                        }
+                    });
+            });
+        });
+
+        // Test content types
+        document.getElementById('test-mime').addEventListener('click', function() {
+            const resultsTable = document.getElementById('mime-results');
+            resultsTable.innerHTML = '<tr><td colspan="3">Testing content types...</td></tr>';
+
+            const files = [
+                { path: '/index.html', expected: 'text/html' },
+                { path: '/css/timer.css', expected: 'text/css' },
+                { path: '/js/diagnostics.js', expected: 'application/javascript' },
+                { path: '/_framework/blazor.webassembly.js', expected: 'application/javascript' }
+            ];
+
+            let results = '';
+            let completedRequests = 0;
+
+            files.forEach(file => {
+                fetch(file.path)
+                    .then(response => {
+                        const contentType = response.headers.get('content-type');
+                        const isMatch = contentType && contentType.includes(file.expected);
+
+                        results += `
+                            <tr>
+                                <td>${file.path}</td>
+                                <td class="${response.ok ? 'success' : 'danger'}">${response.ok ? '✓ Success' : '✗ Failed'} (${response.status})</td>
+                                <td class="${isMatch ? 'success' : 'warning'}">${contentType || 'Not specified'}</td>
+                            </tr>
+                        `;
+                    })
+                    .catch(error => {
+                        results += `
+                            <tr>
+                                <td>${file.path}</td>
+                                <td class="danger" colspan="2">✗ Error: ${error.message}</td>
+                            </tr>
+                        `;
+                    })
+                    .finally(() => {
+                        completedRequests++;
+                        if (completedRequests === files.length) {
+                            resultsTable.innerHTML = results;
+                        }
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,26 +1,9 @@
 {
   "routes": [
     {
-      "route": "/*",
-      "serve": "/index.html",
-      "statusCode": 200
-    },
-    {
       "route": "/_framework/blazor.webassembly.js",
       "headers": {
-        "Content-Type": "application/javascript; charset=utf-8"
-      }
-    },
-    {
-      "route": "/_framework/*.js",
-      "headers": {
-        "Content-Type": "application/javascript; charset=utf-8"
-      }
-    },
-    {
-      "route": "/_framework/*.wasm",
-      "headers": {
-        "Content-Type": "application/wasm"
+        "Content-Type": "application/javascript"
       }
     },
     {
@@ -30,80 +13,22 @@
       }
     },
     {
-      "route": "/_framework/*.dat",
+      "route": "/_framework/*.wasm",
       "headers": {
-        "Content-Type": "application/octet-stream"
-      }
-    },
-    {
-      "route": "/_framework/*.pdb",
-      "headers": {
-        "Content-Type": "application/octet-stream"
-      }
-    },
-    {
-      "route": "/_framework/*.blat",
-      "headers": {
-        "Content-Type": "application/octet-stream"
-      }
-    },
-    {
-      "route": "/css/*",
-      "headers": {
-        "Content-Type": "text/css"
-      }
-    },
-    {
-      "route": "/js/*",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    },
-    {
-      "route": "/images/*",
-      "headers": {
-        "Cache-Control": "public, max-age=604800, immutable"
+        "Content-Type": "application/wasm"
       }
     }
   ],
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": ["/_framework/*", "/css/*", "*.ico", "*.png", "*.jpg"]
   },
   "mimeTypes": {
-    ".html": "text/html",
-    ".css": "text/css",
-    ".js": "application/javascript",
-    ".wasm": "application/wasm",
     ".dll": "application/octet-stream",
-    ".blat": "application/octet-stream",
-    ".dat": "application/octet-stream",
-    ".pdb": "application/octet-stream",
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".svg": "image/svg+xml",
+    ".wasm": "application/wasm",
+    ".js": "application/javascript",
     ".json": "application/json",
-    ".ico": "image/x-icon",
-    ".br": "application/x-br",
-    ".gz": "application/gzip"
-  },
-  "platformErrorOverrides": [
-    {
-      "errorType": "NotFound",
-      "serve": "/index.html"
-    },
-    {
-      "errorType": "Unauthorized",
-      "serve": "/index.html"
-    },
-    {
-      "errorType": "Forbidden",
-      "serve": "/index.html"
-    }
-  ],
-  "globalHeaders": {
-    "content-security-policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; connect-src *; img-src 'self' data:;",
-    "cache-control": "no-cache",
-    "X-Content-Type-Options": "nosniff"
+    ".html": "text/html",
+    ".css": "text/css"
   }
 }

@@ -3,72 +3,17 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Toastmasters Timer - Speech Timing Tool</title>
         <meta
             name="description"
             content="A simple, effective timer for Toastmasters speeches with color indicators and timing reports."
         />
-        <!-- Removed redirect, loading app directly -->
+        <base href="./" />
         <link rel="icon" type="image/png" href="favicon.png" />
-        <style>
-            body {
-                font-family:
-                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                    "Helvetica Neue", Arial, sans-serif;
-                text-align: center;
-                padding: 40px;
-                background-color: #f8f9fa;
-            }
-            h1 {
-                color: #1a365d;
-            }
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            .spinner {
-                width: 40px;
-                height: 40px;
-                border: 4px solid #f3f3f3;
-                border-top: 4px solid #1a365d;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin: 20px auto;
-            }
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-        </style>
+        <link href="css/timer.css" rel="stylesheet" />
     </head>
     <body>
-        <div class="container">
-            <h1>Toastmasters Timer</h1>
-            <div class="spinner"></div>
-            <p>Redirecting to the application...</p>
-            <noscript>
-                <div
-                    style="
-                        text-align: center;
-                        padding: 20px;
-                        font-family: sans-serif;
-                    "
-                >
-                    <h2>JavaScript is required</h2>
-                    <p>Please enable JavaScript to use this application.</p>
-                </div>
-            </noscript>
-        </div>
-
-        <!-- Load our helper scripts -->
-        <script src="js/azure-swa-helper.js"></script>
-        <script src="js/blazor-loader.js"></script>
-
-        <!-- App will be loaded by Blazor -->
         <div id="app">
             <div
                 style="
@@ -81,9 +26,83 @@
                 <div style="text-align: center">
                     <h1>Loading Toastmasters Timer...</h1>
                     <p>A simple, effective timer for your speeches</p>
-                    <div class="spinner"></div>
+                    <div
+                        style="
+                            width: 200px;
+                            height: 5px;
+                            background-color: #f3f3f3;
+                            border-radius: 5px;
+                            margin: 20px auto;
+                            overflow: hidden;
+                        "
+                    >
+                        <div
+                            style="
+                                height: 100%;
+                                width: 0;
+                                background-color: #1b6ec2;
+                                animation: loading-progress 2s infinite
+                                    ease-in-out;
+                            "
+                        ></div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div id="blazor-error-ui" style="display: none">
+            An unhandled error has occurred.
+            <a href="" class="reload">Reload</a>
+            <a class="dismiss">🗙</a>
+        </div>
+
+        <script src="js/diagnostics.js"></script>
+        <script src="_framework/blazor.webassembly.js"></script>
+
+        <noscript>
+            <div
+                style="
+                    text-align: center;
+                    padding: 20px;
+                    font-family: sans-serif;
+                "
+            >
+                <h2>JavaScript is required</h2>
+                <p>Please enable JavaScript to use this application.</p>
+            </div>
+        </noscript>
+
+        <style>
+            @keyframes loading-progress {
+                0% {
+                    width: 0;
+                }
+                50% {
+                    width: 100%;
+                }
+                100% {
+                    width: 0;
+                }
+            }
+
+            #blazor-error-ui {
+                background-color: #ffffe0;
+                bottom: 0;
+                box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+                display: none;
+                left: 0;
+                padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+                position: fixed;
+                width: 100%;
+                z-index: 1000;
+            }
+
+            #blazor-error-ui .dismiss {
+                cursor: pointer;
+                position: absolute;
+                right: 0.75rem;
+                top: 0.5rem;
+            }
+        </style>
     </body>
 </html>
