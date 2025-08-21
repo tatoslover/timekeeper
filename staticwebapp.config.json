@@ -1,0 +1,103 @@
+{
+  "routes": [
+    {
+      "route": "/_framework/*",
+      "headers": {
+        "Cache-Control": "public, max-age=604800, immutable"
+      }
+    },
+    {
+      "route": "/_framework/blazor.webassembly.js",
+      "headers": {
+        "Content-Type": "application/javascript; charset=utf-8"
+      }
+    },
+    {
+      "route": "/_framework/*.js",
+      "headers": {
+        "Content-Type": "application/javascript; charset=utf-8"
+      }
+    },
+    {
+      "route": "/_framework/*.wasm",
+      "headers": {
+        "Content-Type": "application/wasm"
+      }
+    },
+    {
+      "route": "/_framework/*.dll",
+      "headers": {
+        "Content-Type": "application/octet-stream"
+      }
+    },
+    {
+      "route": "/_framework/*.dat",
+      "headers": {
+        "Content-Type": "application/octet-stream"
+      }
+    },
+    {
+      "route": "/_framework/*.pdb",
+      "headers": {
+        "Content-Type": "application/octet-stream"
+      }
+    },
+    {
+      "route": "/_framework/*.blat",
+      "headers": {
+        "Content-Type": "application/octet-stream"
+      }
+    },
+    {
+      "route": "/css/*",
+      "headers": {
+        "Content-Type": "text/css"
+      }
+    },
+    {
+      "route": "/js/*",
+      "headers": {
+        "Content-Type": "application/javascript"
+      }
+    },
+    {
+      "route": "/images/*",
+      "headers": {
+        "Cache-Control": "public, max-age=604800, immutable"
+      }
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/_framework/*",
+      "/css/*",
+      "/js/*",
+      "/images/*",
+      "/*.ico",
+      "/*.png"
+    ]
+  },
+  "mimeTypes": {
+    ".html": "text/html",
+    ".css": "text/css",
+    ".js": "application/javascript",
+    ".wasm": "application/wasm",
+    ".dll": "application/octet-stream",
+    ".blat": "application/octet-stream",
+    ".dat": "application/octet-stream",
+    ".pdb": "application/octet-stream",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".svg": "image/svg+xml",
+    ".json": "application/json",
+    ".ico": "image/x-icon"
+  },
+  "platformErrorOverrides": [
+    {
+      "errorType": "NotFound",
+      "serve": "/index.html"
+    }
+  ]
+}

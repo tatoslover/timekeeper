@@ -60,14 +60,25 @@ dotnet run
 
 ## Deployment
 
-This project is deployed on Azure Static Web Apps. To deploy your own instance:
+This project is deployed on Azure Static Web Apps using the Azure SWA CLI method. To deploy your own instance:
 
 1. Fork this repository
 2. Create an Azure Static Web App resource in the Azure Portal
-3. Connect it to your GitHub repository
-4. The workflow will automatically build and deploy the application
+3. Generate a deployment token in the Azure Portal:
+   - Go to your Static Web App resource
+   - Navigate to "Manage deployment token"
+   - Copy the token
+4. Add the token as a GitHub Secret named `AZURE_STATIC_WEB_APPS_API_TOKEN_YOUR_APP_NAME`
+5. The GitHub workflow will automatically build and deploy the application
 
-The deployment uses GitHub Actions with the Azure Static Web Apps workflow.
+The deployment uses GitHub Actions with the Azure Static Web Apps CLI, which provides more reliable deployment for Blazor WebAssembly applications.
+
+### Troubleshooting Deployment
+
+If you encounter MIME type errors or other issues:
+- Make sure `staticwebapp.config.json` is properly configured
+- Verify that the deployment token is correctly set in your GitHub secrets
+- Check the GitHub Actions logs for detailed error messages
 
 ## Contributing
 
