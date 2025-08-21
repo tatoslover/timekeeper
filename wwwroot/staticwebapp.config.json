@@ -1,7 +1,15 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/images/*.{png,jpg,gif}", "/css/*", "/js/*", "/_framework/*"]
+    "exclude": [
+      "/images/*.{png,jpg,gif}",
+      "/css/*",
+      "/js/*",
+      "/_framework/*",
+      "/*.ico",
+      "/*.br",
+      "/*.gz"
+    ]
   },
   "routes": [
     {
@@ -18,13 +26,15 @@
   },
   "globalHeaders": {
     "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.azurestaticapps.net; worker-src 'self' blob:",
-    "cache-control": "must-revalidate, max-age=86400"
+    "cache-control": "no-cache"
   },
   "mimeTypes": {
     ".json": "text/json",
     ".wasm": "application/wasm",
     ".dll": "application/octet-stream",
     ".dat": "application/octet-stream",
-    ".blat": "application/octet-stream"
+    ".blat": "application/octet-stream",
+    ".br": "application/brotli",
+    ".gz": "application/gzip"
   }
 }

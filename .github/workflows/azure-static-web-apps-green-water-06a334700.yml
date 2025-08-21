@@ -44,10 +44,10 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/timekeeper" # App source code path - where the Timekeeper.csproj is located
+          app_location: "timekeeper" # App source code path - where the Timekeeper.csproj is located
           api_location: "" # Api source code path - not used
-          output_location: "wwwroot" # Built app content directory - output of Blazor WebAssembly
-          app_build_command: "dotnet publish -c Release" # Command to build the Blazor WebAssembly app
+          output_location: "published/wwwroot" # Built app content directory - output of Blazor WebAssembly
+          app_build_command: "chmod +x build.sh && ./build.sh" # Use custom build script
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
 
