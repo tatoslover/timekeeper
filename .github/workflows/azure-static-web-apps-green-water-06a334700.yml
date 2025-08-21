@@ -48,7 +48,7 @@ jobs:
           app_location: "." # App source code path - root of the repository
           api_location: "" # Api source code path - not used
           output_location: "wwwroot" # Built app content directory - output of Blazor WebAssembly
-          app_build_command: "dotnet publish -c Release -o ./publish && cp -r ./publish/wwwroot . && cp staticwebapp.config.json wwwroot/"
+          app_build_command: "dotnet publish -c Release -o ./publish && cp -r ./publish/wwwroot . && cp routes.json wwwroot/ && cp web.config wwwroot/ && cp .env wwwroot/"
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
 
