@@ -1,0 +1,49 @@
+name: Deploy to Azure Blob Storage
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build and publish
+        run: |
+          dotnet publish -c Release -o published
+          # Ensure wwwroot folder is present in output
+          mkdir -p published-content
+          cp -r published/wwwroot/* published-content/
+
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Upload to Azure Blob Storage
+        run: |
+          # Create storage container if it doesn't exist
+          az storage container create --name '$web' --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} --auth-mode login
+
+          # Upload files to Azure Blob Storage
+          az storage blob upload-batch --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} --auth-mode login --source published-content --destination '$web' --overwrite
+
+      - name: Purge CDN endpoint
+        run: |
+          # Purge Azure CDN endpoint to refresh content (if using CDN)
+          az cdn endpoint purge --content-paths "/*" --profile-name ${{ secrets.AZURE_CDN_PROFILE_NAME }} --name ${{ secrets.AZURE_CDN_ENDPOINT_NAME }} --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} || echo "CDN purge skipped - endpoint may not exist"
+
+      - name: Logout from Azure
+        run: az logout

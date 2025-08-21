@@ -14,9 +14,6 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - uses: actions/checkout@v3
         with:
@@ -26,29 +23,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "8.0.x"
-
-      - name: Build .NET Project
-        run: |
-          echo "Building .NET project..."
-          dotnet publish -c Release -o ./publish
-          mkdir -p ./wwwroot
-          cp -r ./publish/wwwroot/* ./wwwroot/
-          cp routes.json ./wwwroot/
-          cp web.config ./wwwroot/
-          cp app.html ./wwwroot/ || echo "app.html not found"
-
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-
-      - name: Get Id Token
-        uses: actions/github-script@v6
-        id: idtoken
-        with:
-          script: |
-            const coredemo = require('@actions/core')
-            return await coredemo.getIDToken()
-          result-encoding: string
+          dotnet-version: '8.0.x'
 
       - name: Build And Deploy
         id: builddeploy
@@ -57,11 +32,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GREEN_WATER_06A334700 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "."
-          api_location: ""
-          output_location: "wwwroot"
-          skip_app_build: true
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+          app_location: "/" # App source code path
+          api_location: "" # API source code path - optional
+          output_location: "wwwroot" # Built app content directory - optional
+          app_build_command: "dotnet publish -c Release"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
