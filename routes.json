@@ -7,15 +7,15 @@
       }
     },
     {
-      "route": "/_framework/*.js",
+      "route": "/app.html",
       "headers": {
-        "Content-Type": "application/javascript; charset=utf-8"
+        "Content-Type": "text/html; charset=utf-8"
       }
     },
     {
-      "route": "/_framework/*.dll",
+      "route": "/_framework/*.js",
       "headers": {
-        "Content-Type": "application/octet-stream"
+        "Content-Type": "application/javascript; charset=utf-8"
       }
     },
     {
@@ -25,7 +25,13 @@
       }
     },
     {
-      "route": "/*.css",
+      "route": "/_framework/*.dll",
+      "headers": {
+        "Content-Type": "application/octet-stream"
+      }
+    },
+    {
+      "route": "/css/*",
       "headers": {
         "Content-Type": "text/css"
       }
@@ -36,6 +42,17 @@
       "statusCode": 200
     }
   ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/_framework/*", "/css/*", "/*.ico", "/*.png", "/*.html"]
+  },
+  "mimeTypes": {
+    ".js": "application/javascript",
+    ".wasm": "application/wasm",
+    ".dll": "application/octet-stream",
+    ".html": "text/html",
+    ".css": "text/css"
+  },
   "platformErrorOverrides": [
     {
       "errorType": "NotFound",
