@@ -1,0 +1,23 @@
+{
+  "skipBuildDuringDeploy": false,
+  "configPath": "staticwebapp.config.json",
+  "additionalConfigFiles": [
+    {
+      "sourcePath": "staticwebapp.config.json",
+      "targetPath": "staticwebapp.config.json"
+    }
+  ],
+  "appLocation": ".",
+  "apiLocation": "",
+  "outputLocation": "wwwroot",
+  "routes": [
+    {
+      "route": "/_framework/blazor.webassembly.js",
+      "serve": "/_framework/blazor.webassembly.js",
+      "headers": {
+        "Content-Type": "application/javascript"
+      }
+    }
+  ],
+  "buildCommand": "dotnet publish -c Release -o ./publish && cp -r ./publish/wwwroot ."
+}
