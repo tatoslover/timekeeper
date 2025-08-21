@@ -1,10 +1,9 @@
 {
   "routes": [
     {
-      "route": "/_framework/*",
-      "headers": {
-        "Cache-Control": "public, max-age=604800, immutable"
-      }
+      "route": "/*",
+      "serve": "/index.html",
+      "statusCode": 200
     },
     {
       "route": "/_framework/blazor.webassembly.js",
@@ -68,15 +67,7 @@
     }
   ],
   "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": [
-      "/_framework/*",
-      "/css/*",
-      "/js/*",
-      "/images/*",
-      "/*.ico",
-      "/*.png"
-    ]
+    "rewrite": "/index.html"
   },
   "mimeTypes": {
     ".html": "text/html",
@@ -92,12 +83,27 @@
     ".jpeg": "image/jpeg",
     ".svg": "image/svg+xml",
     ".json": "application/json",
-    ".ico": "image/x-icon"
+    ".ico": "image/x-icon",
+    ".br": "application/x-br",
+    ".gz": "application/gzip"
   },
   "platformErrorOverrides": [
     {
       "errorType": "NotFound",
       "serve": "/index.html"
+    },
+    {
+      "errorType": "Unauthorized",
+      "serve": "/index.html"
+    },
+    {
+      "errorType": "Forbidden",
+      "serve": "/index.html"
     }
-  ]
+  ],
+  "globalHeaders": {
+    "content-security-policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; connect-src *; img-src 'self' data:;",
+    "cache-control": "no-cache",
+    "X-Content-Type-Options": "nosniff"
+  }
 }

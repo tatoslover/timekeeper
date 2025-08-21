@@ -8,7 +8,7 @@
             name="description"
             content="A simple, effective timer for Toastmasters speeches with color indicators and timing reports."
         />
-        <meta http-equiv="refresh" content="0;URL='app.html'" />
+        <!-- Removed redirect, loading app directly -->
         <link rel="icon" type="image/png" href="favicon.png" />
         <style>
             body {
@@ -50,14 +50,40 @@
             <h1>Toastmasters Timer</h1>
             <div class="spinner"></div>
             <p>Redirecting to the application...</p>
-            <p>
-                If you are not redirected automatically, please
-                <a href="app.html">click here</a>.
-            </p>
+            <noscript>
+                <div
+                    style="
+                        text-align: center;
+                        padding: 20px;
+                        font-family: sans-serif;
+                    "
+                >
+                    <h2>JavaScript is required</h2>
+                    <p>Please enable JavaScript to use this application.</p>
+                </div>
+            </noscript>
         </div>
 
-        <script>
-            window.location.href = "app.html";
-        </script>
+        <!-- Load our helper scripts -->
+        <script src="js/azure-swa-helper.js"></script>
+        <script src="js/blazor-loader.js"></script>
+
+        <!-- App will be loaded by Blazor -->
+        <div id="app">
+            <div
+                style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                "
+            >
+                <div style="text-align: center">
+                    <h1>Loading Toastmasters Timer...</h1>
+                    <p>A simple, effective timer for your speeches</p>
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

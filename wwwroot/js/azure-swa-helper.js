@@ -14,7 +14,7 @@
       scriptElement.type = "text/javascript";
       scriptElement.src = "/_framework/blazor.webassembly.js";
 
-      // Add error handler
+      // Add error handler - using a simpler version to avoid syntax issues
       scriptElement.onerror = function (error) {
         console.error(
           "Azure SWA Helper: Error loading Blazor WebAssembly script:",
@@ -25,7 +25,7 @@
         );
       };
 
-      // Add load handler
+      // Add load handler - simplified syntax
       scriptElement.onload = function () {
         console.log(
           "Azure SWA Helper: Blazor WebAssembly script loaded successfully",
@@ -81,7 +81,7 @@
   function initialize() {
     console.log("Azure SWA Helper: Running workaround for all environments");
 
-    // Find and remove any existing Blazor script tags
+    // Find and remove any existing Blazor script tags - simplified
     const existingScripts = document.querySelectorAll(
       'script[src*="blazor.webassembly.js"]',
     );
